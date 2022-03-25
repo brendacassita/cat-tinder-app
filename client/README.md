@@ -1,70 +1,200 @@
-# Getting Started with Create React App
+# Cat Tinder
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+# create RAILS app
+## RAILS (using postgresl db)
+```
+$ rails new project-name -d postgresql --api
+$ cd project-name
+$ git add .
+$ git commit -m 'init'
+$ rails db:create (creates db)
+$ rails s -p 3001 - open in browser
+```
 
-In the project directory, you can run:
+- add gems/third party libraries
+Things you may want to add:
 
-### `yarn start`
+* Faker => fake, but real looking data
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+* pry-rails => helps debug
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+* devise-token-auth => auth on backend
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- add to gemfile 
+ -  devise_token_auth setup (backend)
 
-### `yarn build`
+```ruby
+gem 'devise_token_auth', '>= 1.2.0', git: "https://github.com/lynndylanhurley/devise_token_auth"
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+group :development, :test do
+gem "pry-rails"
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+end
+```
+```
+bundle
+```
+- create devise model
+```
+ rails g devise_token_auth:install User api/auth
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- add extends in model - user.rb
+```ruby
+ extend Devise::Models
+ ```
+ 
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- add trackable 
+```
+rails g migration add_trackable_to_users
+```
+ ```ruby
+ class AddTrackableToUsers < ActiveRecord::Migration[6.0]
+  def change
+      ## Trackable
+      add_column :users, :sign_in_count, :integer, :default => 0
+      add_column :users, :current_sign_in_at, :datetime
+      add_column :users, :last_sign_in_at, :datetime
+      add_column :users, :current_sign_in_ip, :string
+      add_column :users, :last_sign_in_ip, :string
+  end
+end
+```
+```
+rails db:migrate
+```
+ 
+ # create REACT app
+## REACT
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+yarn create react-app client
+cd client
+```
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- add 3rd party libraries in Client
+```
+yarn add axios
+yarn add react-router-dom@6
+yarn add react-bootstrap bootstrap@5.1.3
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- add PROXY to package.json:
+```javascript
+ "proxy": "http://localhost:3001",
+```
 
-### Code Splitting
+### folder structure
+```
+$ mkdir src/providers
+$ mkdir src/hooks
+$ mkdir src/components
+$ mkdir src/components/auth
+$ mkdir src/components/shared
+```
+### React router basic setup
+- add routes to index.js
+- index js wrap with BrowserRouter
+- create navbar
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```javascript
+import { Link } from 'react-router-dom';
 
-### Making a Progressive Web App
+const NoMatch = () => (
+  <h3>
+    Page not found return
+    <Link to="/"> Home</Link>
+  </h3>
+)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+export default NoMatch;
+```
 
-### Advanced Configuration
+- navbar
+```javascript
+import { Link } from "react-router-dom"
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+const NavBar = () =>{
+  return(
+    <div>
+      <Link to='/'>Home</Link>
+      <Link to='/login'>Login</Link>
+      <Link to='/register'>Register</Link>
+    </div>
+  )
+}
+export default NavBar
+```
 
-### Deployment
+-app.js
+```javascript
+import logo from './logo.svg';
+import './App.css';
+import Navbar from './components/shared/NavBar';
+import { Routes, Route} from 'react-router-dom';
+import Home from './components/shared/Home';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import NoMatch from './components/shared/NoMatch';
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+function App() {
+  return (
+    <div>
+      <Navbar />
+      <>
+       <Routes>
+         <Route path='/' element={<Home />}/>
+         <Route path='/login' element={<Login />}/>
+         <Route path='/register' element={<Register />}/>
+         <Route path='*' element={<NoMatch />}/>
+       </Routes>
+      </>
+    </div>
+  );
+}
 
-### `yarn build` fails to minify
+export default App;
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-index.js
+```javascript
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
+
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+    </BrowserRouter>,
+  document.getElementById('root')
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+```
+
+### Auth setup (using a provider)
+```
+$ yarn add devise-axios
+```
+```javascript
+import { initMiddleware } from 'devise-axios';
+
+initMiddleware();
+```

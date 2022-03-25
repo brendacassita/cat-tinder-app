@@ -4,8 +4,8 @@
 # create RAILS app
 ## RAILS (using postgresl db)
 ```
-$ rails new project-name -d postgresql --api
-$ rails _6.1.4.7_ new cat-tinder6-sp22 -d postgresql --api
+
+$ rails _6.1.4.7_ new project-name -d postgresql --api
 $ cd project-name
 $ git add .
 $ git commit -m 'init'

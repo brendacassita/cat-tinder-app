@@ -1,23 +1,27 @@
 import logo from './logo.svg';
 import './App.css';
+import Navbar from './components/shared/NavBar';
+import { Routes, Route, useParams} from 'react-router-dom';
+import Home from './components/shared/Home';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import NoMatch from './components/shared/NoMatch';
+import HomeClass from './components/shared/HomeClass';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar />
+      <>
+       <Routes>
+         <Route path='/' element={<Home />}/>
+         <Route path='/home' element={<HomeClass yo={'yoyo'} />}/>
+         <Route path='/login' element={<Login />}/>
+         <Route path='/register' element={<Register />}/>
+         <Route path='*' element={<NoMatch />}/>
+       </Routes>
+      </>
+      <p>Footer for all pages</p>
     </div>
   );
 }
