@@ -13,16 +13,28 @@ const Navbar = () => {
     }
     return (
       <>
-        <Link to="/login">login</Link>
-        <Link to="/register">register</Link>
+        <Link to="/login"> Login </Link> - 
+        <Link to="/register"> Register  </Link> 
       </>
     );
   };
+
+
+  const renderLeft = () =>{
+    if (auth.user) {
+      return <Link to='/'>Home Protected</Link>;
+    }
+
+  }
+
+
+
   return (
     <div style={{display:'flex', justifyContent:'space-between'}}>
       <div>
-        <Link to="/">Home</Link>
-        <Link to="/home">HomeClass</Link>
+        
+        <Link to="/"> Home </Link> - 
+        {renderLeft()}
       </div>
       <div>{renderRightNav()}</div>
     </div>
