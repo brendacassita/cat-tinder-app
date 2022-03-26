@@ -3,7 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../../providers/AuthProvider";
 
 const FetchUser = (props) => {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(false); // checking if user is there.
   const { user, setUser } = useContext(AuthContext);
 
   // [] makes this act as componentDidMount

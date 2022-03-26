@@ -2948,7 +2948,7 @@ combined-stream@^1.0.8:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^2.20.0:
+commander@^2.20.0, commander@^2.9.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -3465,6 +3465,13 @@ devise-axios@^1.0.24:
   integrity sha512-IgSQxWxDprWrZwYihqmeRpZffHRXifuTC4HCI98AzJWslUKoH5xK2LireBhnt4CqSFGXxfH4KfJdQ0vvEwS6kg==
   dependencies:
     "@babel/runtime" "^7.0.0"
+
+devise@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/devise/-/devise-1.0.9.tgz#18efb2d1f53c618ed16aed37975742acece8723e"
+  integrity sha1-GO+y0fU8YY7Rau03l1dCrOzocj4=
+  dependencies:
+    commander "^2.9.0"
 
 didyoumean@^1.2.2:
   version "1.2.2"
